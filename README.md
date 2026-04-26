@@ -44,12 +44,12 @@ Campus Connect is a modern, full-stack web application designed to enhance campu
 | **Calendar** | react-big-calendar |
 | **Date Utilities** | date-fns |
 
-## 📦 Installation
+## 📦 Quick Start
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd campusconnect
+git clone https://github.com/Anangivignesh/campus-connect.git
+cd campus-connect
 
 # Install dependencies
 npm install
@@ -57,12 +57,13 @@ npm install
 # Start development server
 npm run dev
 
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
+# Open http://localhost:5173
+# Login: vignesh@gmail.com / vignesh12
 ```
+
+**For production deployment:** See [DEPLOYMENT.md](./DEPLOYMENT.md) for complete Vercel + Supabase setup.
+
+**Quick reference:** See [QUICKSTART.md](./QUICKSTART.md) for a 10-minute setup guide.
 
 ## 🔐 Mock Authentication
 
@@ -162,6 +163,15 @@ This project follows a phased development approach. Please refer to the implemen
 
 [Add your license here]
 
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [QUICKSTART.md](./QUICKSTART.md) | ⚡ Get started in 10 minutes |
+| [DEPLOYMENT.md](./DEPLOYMENT.md) | 🚀 Deploy to Vercel + Supabase |
+| [DEVELOPMENT.md](./DEVELOPMENT.md) | 🛠️ Developer guide & architecture |
+| [PHASE2_GUIDE.md](./PHASE2_GUIDE.md) | 📡 Migrate to Supabase backend |
+
 ## 🔗 Resources
 
 - [React Documentation](https://react.dev/)
@@ -170,6 +180,7 @@ This project follows a phased development approach. Please refer to the implemen
 - [shadcn/ui](https://ui.shadcn.com/)
 - [Zustand](https://zustand-demo.pmnd.rs/)
 - [Supabase](https://supabase.com/)
+- [Vercel](https://vercel.com/)
 
 ---
 
