@@ -47,11 +47,37 @@ This guide walks you through deploying Campus Connect to Vercel and integrating 
 
 ### Step 3: Create Database Schema
 
-1. **Open SQL Editor**
-   - Click **SQL Editor** in left sidebar
-   - Click **"New Query"**
+**Option A: Use the SQL File (Recommended)**
 
-2. **Run This SQL Script** (copy and paste):
+1. **Download the Schema File**
+   - The file `supabase-schema.sql` is in your repository root
+   - Or copy it from GitHub
+
+2. **Run in Supabase**
+   - Open **SQL Editor** in Supabase dashboard
+   - Click **"New Query"**
+   - Copy the entire contents of `supabase-schema.sql`
+   - Paste into the editor
+   - Click **"Run"**
+   - Wait for "Success. No rows returned"
+
+3. **Verify Tables Created**
+   - Go to **Table Editor**
+   - You should see 8 tables:
+     - profiles
+     - chats
+     - chat_members
+     - messages
+     - message_reads
+     - campus_events
+     - event_rsvps
+     - event_attendance
+     - personal_events
+     - notifications
+
+**Option B: Copy from Documentation**
+
+If you prefer, the same SQL script is also included below (but using the file is easier):
 
 ```sql
 -- Enable UUID extension
@@ -105,6 +131,19 @@ CREATE TABLE chats (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- ============================================
+-- CHAT MEMBERS TABLE
+-- ============================================
+CREATE TABLE chat_members (
+  chat_id UUID REFERENCES chats(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  joined_at TIMESTAMPTZ DEFAULT NOW(),
+  role TEXT NOT NULL CHECK (role IN ('member', 'admin')) DEFAULT 'member',
+  is_live_viewing BOOLEAN DEFAULT false,
+  PRIMARY KEY (chat_id, user_id)
+);
+
+-- Enable RLS on chats (after chat_members exists)
 ALTER TABLE chats ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Users can view chats they are members of"
@@ -121,18 +160,7 @@ CREATE POLICY "Users can create chats"
   ON chats FOR INSERT
   WITH CHECK (auth.uid() = created_by);
 
--- ============================================
--- CHAT MEMBERS TABLE
--- ============================================
-CREATE TABLE chat_members (
-  chat_id UUID REFERENCES chats(id) ON DELETE CASCADE,
-  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
-  joined_at TIMESTAMPTZ DEFAULT NOW(),
-  role TEXT NOT NULL CHECK (role IN ('member', 'admin')) DEFAULT 'member',
-  is_live_viewing BOOLEAN DEFAULT false,
-  PRIMARY KEY (chat_id, user_id)
-);
-
+-- Enable RLS on chat_members
 ALTER TABLE chat_members ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Users can view chat members of their chats"
@@ -414,7 +442,13 @@ CREATE TRIGGER update_personal_events_updated_at BEFORE UPDATE ON personal_event
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 ```
 
+**Note:** The complete SQL script is also available in `supabase-schema.sql` in the repository root.
+
 3. **Click "Run"** - Should see "Success. No rows returned"
+
+4. **Verify Tables**
+   - Go to **Table Editor**
+   - Confirm all 8 tables exist
 
 ### Step 4: Configure Authentication
 
